@@ -26,7 +26,7 @@ So aside from `shift ⇧` that swithes to implicit capital layer, we also have `
 
 I don't want to tinker with microscopic delay parameters and I expect HRM to not interfeer with rolling while typing.
 So I will keep `shift ⇧` and `opt ⌥` as sticky modifiers activated on thumb keys.
-That leaves `cmd ⌘` and `ctrl ⌃` as *HRM*, well maybe I will add `MEH ⌃⌥⌘` or `HYPER ⌃⌥⌘⇧` in.
+That leaves `cmd ⌘` and `ctrl ⌃` as *HRM*, well maybe I will add `MEH ⌃⌥⌘ = ∴` or `HYPER ⌃⌥⌘⇧ = ∷` in.
 
 ### 3. Things to remember
 
@@ -44,7 +44,7 @@ so it's easy to operate and delete text with mouse in right hand
 letters and easily stackable modifiers
 
 * **Thumbs do not write hcaracters** --
-one change at a time... thumbs are for mods, navigation and `space`, `enter ⏎` & `tab ⇥`
+one change at a time... thumbs are for mods, navigation and `space`, `return ⏎` & `tab ⇥`
 
 ---
 
@@ -83,33 +83,81 @@ one change at a time... thumbs are for mods, navigation and `space`, `enter ⏎`
 Letter layout: ***Desend thumbshift***
 
 ```txt
-x c l f v  |  _ _ u p q
-r s n t g  |  _ a e h i
-z w m d b  |  _ o y k j
-    _ _ _  |  _ _ _
+x c l f v  |  . - u p q       X C L F V  |  ? _ U P Q       ź ć ł F √  |  ! / U P Q
+r s n t g  |  , a e h i       R S N T G  |  ; A E H I       R ś ń T G  |  : ą ę H I
+z w m d b  |  ' o y k j       Z W M D B  |  " O Y K J       ż W M D B  |  ` ó Y K J
+    ∴ ⇧ ◡  |  ↷ ⌥ ⏎               ∴ █ ◡  |  ↷ ⌥ ⏎               ∴ ⇧ ◡  |  ↷ █ ⏎
 ```
 
 letters + most used symbols for prose and programming:
 `. , : ; ? ' - _`
 
-### Symbols - SM
+#### Additional functionalities:
+
+**Implicit layers**:
+* `⇧ shift` - capitalize
+* `⌥ opt` - polish diacritics
+
+**HRM**:
+* middles `⌘ cmd` (letters: `n` & `e`)
+* pinkies `⌃ ctrl` (letters: `r` & `i`)
+
+**Thumbs**:
+| Key | Tap                | Hold           |
+|-----|--------------------|----------------|
+| L3  | `⌫ fw-delete`      | `∴ MEH`        |
+| L2  | `⇪ caps` for words | `⇧ shift`      |
+| L1  | `◡ space`          | `◡` repeated   |
+| R1  | `↷ next layer`     | `↷ next layer` |
+| R2  | `⇥ tab`            | `⌥ option`     |
+| R3  | `⏎ return`         |                |
+
+**Symbols**:
+| symbol | shift | option  |
+|--------|-------|---------|
+| `.`    | `?`   | `!`     |
+| `,`    | `;`   | `:`     |
+| `'`    | `"`   | `` ` `` |
+| `-`    | `_`   | `/`     |
+
+### Symbols & Arrows - SA
 
 ```txt
-x c l f v  |  _ _ u p q
-r s n t g  |  _ a e h i
-z w m d b  |  _ o y k j
-    _ _ _  |  _ _ _
+_ _ _ _ _  |  _ _ _ _ _       _ _ _ _ _  |  _ _ _ _ _
+< { [ ( _  |  ◁ △ ▽ ▷ ␛       > } ] ) _  |  ← ↑ ↓ → ␛
+_ _ _ _ _  |  _ _ _ _ _       _ _ _ _ _  |  _ _ _ _ _
+    ∴ ⇧ ↶  |  ↷ _ ⏎               ∴ █ ↶  |  ↷ _ ⏎
 ```
 
+**More symbols to fit**:
+`@` `#` `$` `%` `^` `&` `*` `+` `=` `~` `|` `\` 
+`.` `?` `!` `,` `;` `:` `'` `"` `` ` `` `-` `_` `/`
+`€` `¡` `¿` `←` `↑` `↓` `→`
+
+#### Additional functionalities:
+
+**HRM**:
+* left middle `⌘ cmd` (key: `[`)
+* right ring `⌥ option` (key: `{`)
+* pinkies `⌃ ctrl` (key: `<`)
 
 
-### Numbers - NM
+### Numbers - NB
 
 ```txt
-x c l f v  |  _ 7 8 9 q
-r s n t g  |  _ 4 5 6 i
-z w m d b  |  0 1 2 3 j
-    _ _ _  |  _ _ _
+_ _ _ _ _  |  / 7 8 9 -
+_ _ _ _ _  |  * 4 5 6 +
+_ _ _ _ _  |  0 1 2 3 .
+    ∴ ⇧ ↶  |  ↷ _ ⏎
 ```
 
 Numbers like on a numpad (except 0 not on thumb)
+
+### Game - GM
+
+```txt
+⇢ q w e r  |  _ _ _ _ _
+⇧ s d f g  |  _ _ _ _ _
+⌃ z x c v  |  _ _ _ _ _
+    ␛ _ ◡  |  _ _ _
+```
