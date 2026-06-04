@@ -1,83 +1,140 @@
-#define AL 0
-#define SA 1
-#define NB 2
-#define GG 3
+/*
+ * Chocofi keymap — 36 keys (3x5 + 3 thumbs)
+ *
+ * The Chocofi is electrically a Corne, so it is built with the upstream
+ * `corne` shield. Because this is a 36-key board we select the Corne's
+ * 5-column physical layout below (the shield otherwise defaults to the
+ * 42-key 6-column layout, which would reject a 36-key keymap).
+ *
+ * Design (see README.md):
+ *   - Toggleable layers: tap a layer key to switch, hold for momentary access.
+ *   - Every non-base layer has a "return to base" key (R1) so you never get lost.
+ *   - Shift + Opt are momentary thumb mods (NOT home-row), so macOS handles
+ *     capitals and Polish diacritics (Polish Pro layout) automatically.
+ *   - Home-row mods: Cmd on the middle-finger home keys, Ctrl on the pinkies.
+ *   - Thumbs carry no letters: only mods, space, enter, tab, backspace, layers.
+ *
+ * Position map:
+ *   0  1  2  3  4      5  6  7  8  9
+ *   10 11 12 13 14     15 16 17 18 19
+ *   20 21 22 23 24     25 26 27 28 29
+ *         30 31 32     33 34 35
+ *   left thumbs: 30=L3 31=L2 32=L1   right thumbs: 33=R1 34=R2 35=R3
+ */
+
+#define BASE 0
+#define NAV  1   // System & Arrows
+#define SYM  2   // Symbols & Numbers
+#define FN   3   // F-keys + closing brackets (hold L2 on SYM)
+#define GAME 4
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/pointing.h>
 
 / {
-keymap {
-  compatible = "zmk,keymap";
+    // Chocofi = Corne 5-column (36 keys). Overrides the shield's 6-column default.
+    chosen {
+        zmk,physical-layout = &foostan_corne_5col_layout;
+    };
 
-  default_layer {
-    display-name = "BASE";
-    // +---------------------------+       +---------------------------+       +---------------------------+
-    // |  x c l f v     . - u p q  |       |  X C L F V     ? _ U P Q  |       |  ź ć ł F √     ! / U P Q  |
-    // |  r s n t g     , a e h i  |       |  R S N T G     ; A E H I  |       |  R ś ń T G     : ą ę H I  |
-    // |  z w m d b     ' o y k j  |       |  Z W M D B     " O Y K J  |       |  ż W M D B     ` ó Y K J  |
-    // |      ∴ ⇧ ◡     ↷ ⌥ ⏎      |       |      ∴ █ ◡     ↷ ⌥ ⏎      |       |      ∴ ⇧ ◡     ↷ █ ⏎      |
-    // +---------------------------+       +---------------------------+       +---------------------------+
-    bindings = <
-        &kp X &kp C &kp L &kp F &kp V    &kp _ &kp _ &kp U &kp P &kp Q
-        &kp R &kp S &kp N &kp T &kp G    &kp _ &kp A &kp E &kp H &kp I
-        &kp Z &kp V &kp M &kp D &kp B    &kp _ &kp O &kp Y &kp K &kp J
+    behaviors {
+        // Left-hand home-row mod: hold only fires if a right-hand key follows.
+        hml: home_row_mod_left {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            require-prior-idle-ms = <125>;
+            hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 33 34 35>;
+            hold-trigger-on-release;
+            bindings = <&kp>, <&kp>;
+        };
 
-        &kp LGUI &mo 1 &kp SPACE   &kp RET &mo 2 &kp RALT
-    >;
-  };
+        // Right-hand home-row mod: hold only fires if a left-hand key follows.
+        hmr: home_row_mod_right {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            require-prior-idle-ms = <125>;
+            hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 30 31 32>;
+            hold-trigger-on-release;
+            bindings = <&kp>, <&kp>;
+        };
 
-  lower_layer {
-    display-name = "Symbols & Arrows";
-    // +---------------------------+       +---------------------------+
-    // |  _ _ _ _ _     _ _ _ _ _  |       |  _ _ _ _ _     _ _ _ _ _  |
-    // |  < { [ ( _     ◁ △ ▽ ▷ ␛  |       |  > } ] ) _     ← ↑ ↓ → ␛  |
-    // |  _ _ _ _ _     _ _ _ _ _  |       |  _ _ _ _ _     _ _ _ _ _  |
-    // |      ∴ ⇧ ↶     ↷ _ ⏎      |       |      ∴ █ ↶     ↷ _ ⏎      |
-    // +---------------------------+       +---------------------------+
-    bindings = <
-        &kp X &kp C &kp L &kp F &kp V    &kp _ &kp _ &kp U &kp P &kp Q
-        &kp R &kp S &kp N &kp T &kp G    &kp _ &kp A &kp E &kp H &kp I
-        &kp Z &kp V &kp M &kp D &kp B    &kp _ &kp O &kp Y &kp K &kp J
+        // Layer key: tap = switch layer (&to), hold = momentary layer (&mo).
+        // Usage: &lt_to <hold-layer> <tap-layer>
+        lt_to: layer_tap_to {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            bindings = <&mo>, <&to>;
+        };
 
-        &kp LGUI &mo 1 &kp SPACE   &kp RET &mo 2 &kp RALT
-    >;
-  };
+        // Thumb mod-tap (balanced) for thumb Shift / Opt and the BSPC/MEH key.
+        mtt: mod_tap_thumb {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <220>;
+            bindings = <&kp>, <&kp>;
+        };
+    };
 
-  raise_layer {
-    display-name = "Numbers";
-    // +---------------------------+
-    // |  _ _ _ _ _     / 7 8 9 -  |
-    // |  < { [ ( _     * 4 5 6 +  |
-    // |  _ _ _ _ _     0 1 2 3 .  |
-    // |      ∴ ⇧ ↶     ↷ _ ⏎      |
-    // +---------------------------+
-    bindings = <
-        &kp X &kp C &kp L &kp F &kp V    &kp _ &kp _ &kp U &kp P &kp Q
-        &kp R &kp S &kp N &kp T &kp G    &kp _ &kp A &kp E &kp H &kp I
-        &kp Z &kp V &kp M &kp D &kp B    &kp _ &kp O &kp Y &kp K &kp J
+    keymap {
+        compatible = "zmk,keymap";
 
-        &kp LGUI &mo 1 &kp SPACE   &kp RET &mo 2 &kp RALT
-    >;
-  };
+        base_layer {
+            display-name = "Base";
+            bindings = <
+   &kp X    &kp C          &kp L      &kp F           &kp V        &kp SEMI   &kp APOS        &kp U      &kp P           &kp Q
+   &kp R    &hml LGUI S    &kp N      &hml LCTRL T    &kp G        &kp COMMA  &hmr RCTRL A    &kp E      &hmr RGUI H     &kp I
+   &kp Z    &kp W          &kp M      &kp D           &kp B        &kp DOT    &kp O           &kp Y      &kp K           &kp J
+                                  &mtt LC(LA(LGUI)) BSPC  &mtt LSHFT ESC  &lt_to SYM NAV      &kp SPACE  &mtt LALT TAB  &kp RET
+            >;
+        };
 
-  raise_layer {
-    display-name = "GAME";
-    // +---------------------------+
-    // |  ⇢ q w e r     _ _ _ _ _  |
-    // |  ⇧ s d f g     _ _ _ _ _  |
-    // |  ⌃ z x c v     _ _ _ _ _  |
-    // |      ␛ _ ◡     _ _ _      |
-    // +---------------------------+
-    bindings = <
-        &kp X &kp C &kp L &kp F &kp V    &kp _ &kp _ &kp U &kp P &kp Q
-        &kp R &kp S &kp N &kp T &kp G    &kp _ &kp A &kp E &kp H &kp I
-        &kp Z &kp V &kp M &kp D &kp B    &kp _ &kp O &kp Y &kp K &kp J
+        nav_layer {
+            display-name = "Nav";
+            bindings = <
+   &none   &kp C_PP           &kp C_PREV          &kp C_NEXT           &none      &msc SCRL_UP   &kp HOME        &kp PG_UP       &kp PG_DN       &kp END
+   &none   &hml LGUI C_MUTE   &hml LALT C_VOL_DN  &hml LCTRL C_VOL_UP  &none      &kp ESC        &kp LEFT        &kp UP          &kp DOWN        &kp RIGHT
+   &none   &kp C_BRI_MIN      &kp C_BRI_DN        &kp C_BRI_UP         &none      &msc SCRL_DOWN &mmv MOVE_LEFT  &mmv MOVE_UP    &mmv MOVE_DOWN  &mmv MOVE_RIGHT
+                                          &kp BSPC  &mtt LSHFT DEL  &to SYM      &to BASE  &kp TAB  &kp RET
+            >;
+        };
 
-        &kp LGUI &mo 1 &kp SPACE   &kp RET &mo 2 &kp RALT
-    >;
-  };
-};
+        sym_layer {
+            display-name = "Sym";
+            bindings = <
+   &kp PRCNT  &kp DLLR   &kp AT     &kp AMPS   &kp PIPE     &kp FSLH   &kp N7  &kp N8  &kp N9  &kp MINUS
+   &kp LT     &kp LBRC   &kp LBKT   &kp LPAR   &kp DOT      &kp ASTRK  &kp N4  &kp N5  &kp N6  &kp PLUS
+   &kp GT     &kp CARET  &kp EXCL   &kp QMARK  &kp GRAVE    &kp N0     &kp N1  &kp N2  &kp N3  &kp EQUAL
+                              &kp BSPC  &mo FN  &to GAME      &to BASE  &kp TAB  &kp RET
+            >;
+        };
 
+        fn_layer {
+            display-name = "Fn";
+            bindings = <
+   &none   &kp RA(N3)  &kp HASH  &none      &none       &kp BSLH  &kp F7   &kp F8   &kp F9   &kp UNDER
+   &kp GT  &kp RBRC    &kp RBKT  &kp RPAR   &kp COMMA   &kp F12   &kp F4   &kp F5   &kp F6   &kp F10
+   &none   &none       &none     &none      &kp TILDE   &kp F13   &kp F1   &kp F2   &kp F3   &kp F11
+                            &trans  &trans  &trans       &to BASE  &trans  &trans
+            >;
+        };
+
+        game_layer {
+            display-name = "Game";
+            bindings = <
+   &kp TAB    &kp Q  &kp W  &kp E  &kp R       &kp T  &kp Y  &kp U  &kp I  &kp O
+   &kp LSHFT  &kp S  &kp D  &kp F  &kp G       &kp G  &kp H  &kp J  &kp K  &kp L
+   &kp LCTRL  &kp Z  &kp X  &kp C  &kp V       &kp B  &kp N  &kp M  &kp P  &none
+                        &kp ESC  &kp SPACE  &kp N1      &to BASE  &trans  &trans
+            >;
+        };
+    };
 };
