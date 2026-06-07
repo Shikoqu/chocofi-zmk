@@ -1,6 +1,6 @@
 # Chocofi Layout
 
-![chocofi build](/.github/assets/chocofi-build.jpg)
+![chocofi build](/assets/chocofi-build.jpg)
 
 ## Key principles
 
