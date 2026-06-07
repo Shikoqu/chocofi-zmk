@@ -25,5 +25,5 @@ include:
     shield: corne_right
   # Flash this to BOTH halves to wipe stored Bluetooth bonds, then re-flash
   # the corne_left / corne_right firmware. Remove once pairing is sorted.
-  - board: nice_nano_v2
-    shield: settings_reset
+  # - board: nice_nano_v2
+  #   shield: settings_reset
